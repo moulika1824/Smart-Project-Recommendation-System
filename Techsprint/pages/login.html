@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login - Smart Project Recommender</title>
+<link rel="stylesheet" href="../css/main.css">
+</head>
+
+<body class="min-h-screen bg-background flex items-center justify-center">
+
+<div class="card bg-surface shadow-lg p-10 w-full max-w-md">
+
+  <h1 class="text-3xl font-bold text-center mb-4">Welcome Back 👋</h1>
+  <p class="text-center text-text-secondary mb-6">
+    Enter your email to continue
+  </p>
+
+  <form id="loginForm" class="space-y-4">
+    <input
+      type="email"
+      id="email"
+      placeholder="Enter your email"
+      class="input w-full"
+      required
+    />
+
+    <button class="btn btn-primary w-full">
+      Continue
+    </button>
+  </form>
+
+</div>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", e => {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value;
+
+  sessionStorage.setItem("isAuthenticated", "true");
+  localStorage.setItem("userEmail", email);
+
+  window.location.href = "home_dashboard.html";
+});
+</script>
+
+</body>
+</html>

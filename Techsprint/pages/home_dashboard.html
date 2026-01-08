@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Project Recommender</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:"Segoe UI",system-ui,sans-serif;
+  background:#f6f7fb;
+  color:#1f2937;
+}
+.container{max-width:1200px;margin:auto;padding:20px}
+.hidden{display:none}
+
+/* HEADER */
+header{
+  position:sticky;top:0;z-index:1000;
+  background:#fff;border-bottom:1px solid #e5e7eb
+}
+.nav{display:flex;justify-content:space-between;align-items:center}
+.nav-left{display:flex;gap:12px;align-items:center}
+.logo{
+  width:42px;height:42px;border-radius:50%;
+  background:#2563eb;color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700
+}
+.nav-right{display:flex;gap:14px;align-items:center}
+
+/* BUTTONS */
+button{
+  padding:10px 16px;border-radius:10px;
+  font-weight:600;border:none;cursor:pointer
+}
+.btn-primary{background:#2563eb;color:white}
+.btn-outline{background:white;border:1.5px solid #d1d5db}
+
+/* LAYOUT */
+.main-grid{
+  display:grid;
+  grid-template-columns:2.7fr 1.3fr;
+  gap:22px;margin-top:25px
+}
+
+/* CARD */
+.card{
+  background:white;border-radius:16px;
+  padding:24px;
+  box-shadow:0 12px 30px rgba(0,0,0,.08)
+}
+
+/* FORM */
+label{font-size:14px;font-weight:600}
+select{
+  width:100%;padding:12px;margin-top:8px;
+  border-radius:10px;border:1px solid #d1d5db
+}
+.option-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:12px;margin-top:12px
+}
+.option{
+  border:1.5px solid #e5e7eb;border-radius:14px;
+  padding:14px;cursor:pointer;background:#fafafa
+}
+.option:hover{border-color:#2563eb;background:#eff6ff}
+.option input{margin-right:8px}
+
+/* SIDEBAR HIGHLIGHT */
+.tip-card{
+  background:#fff7d6;
+  border-radius:16px;
+  padding:20px;
+  border-left:6px solid #f59e0b;
+  box-shadow:0 0 0 2px rgba(245,158,11,.15)
+}
+.tip{margin-bottom:8px}
+
+.stats-highlight{
+  border-left:6px solid #2563eb;
+  background:#f0f6ff;
+}
+.stats-card{
+  display:flex;gap:14px;align-items:center;
+  background:#f9fafb;border-radius:14px;
+  padding:16px;margin-bottom:12px
+}
+.icon{
+  width:42px;height:42px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  color:white
+}
+.green{background:#22c55e}
+.blue{background:#3b82f6}
+.purple{background:#8b5cf6}
+
+/* RESULT */
+.badge{
+  display:inline-block;background:#e5e7eb;
+  padding:6px 12px;border-radius:999px;
+  font-size:12px;margin:6px 6px 0 0
+}
+</style>
+</head>
+
+<body>
+
+<script>
+if(sessionStorage.getItem("isAuthenticated")!=="true"){
+  window.location.href="login.html";
+}
+</script>
+
+<header>
+<div class="container nav">
+  <div class="nav-left">
+    <div class="logo">🚀</div>
+    <div>
+      <strong>Smart Project Recommender</strong><br>
+      <small style="color:#6b7280">AI-Powered Discovery</small>
+    </div>
+  </div>
+
+  <div class="nav-right">
+    <strong id="userName">Student</strong>
+    <button id="homeBtn" class="btn-outline">🏠 Home</button>
+    <button id="logoutBtn" class="btn-outline">🚪 Logout</button>
+  </div>
+</div>
+</header>
+
+<main class="container">
+<div class="main-grid">
+
+<!-- FORM -->
+<div class="card">
+<h2>🔍 Find Your Perfect Project</h2>
+<p style="color:#6b7280;margin-bottom:18px">
+Based on your branch, skills & interests
+</p>
+
+<form id="form">
+
+<label>Engineering Branch *</label>
+<select id="branch">
+  <option value="">Select Branch</option>
+  <option value="cse">CSE</option>
+  <option value="it">IT</option>
+  <option value="aiml">AI & ML</option>
+  <option value="ds">Data Science</option>
+  <option value="cyber">Cyber Security</option>
+  <option value="cloud">Cloud Computing</option>
+  <option value="blockchain">Blockchain</option>
+  <option value="quantum">Quantum Computing</option>
+</select>
+
+<br><br>
+
+<label>Skill Level *</label>
+<div class="option-grid">
+<label class="option"><input type="radio" name="level" value="beginner"> Beginner</label>
+<label class="option"><input type="radio" name="level" value="intermediate"> Intermediate</label>
+<label class="option"><input type="radio" name="level" value="advanced"> Advanced</label>
+</div>
+
+<br>
+
+<label>Interested Domains</label>
+<div class="option-grid">
+<label class="option"><input type="checkbox" value="ai"> AI / ML</label>
+<label class="option"><input type="checkbox" value="web"> Web Development</label>
+<label class="option"><input type="checkbox" value="mobile"> Mobile Apps</label>
+<label class="option"><input type="checkbox" value="iot"> IoT</label>
+<label class="option"><input type="checkbox" value="cyber"> Cyber Security</label>
+<label class="option"><input type="checkbox" value="blockchain"> Blockchain</label>
+<label class="option"><input type="checkbox" value="cloud"> Cloud</label>
+<label class="option"><input type="checkbox" value="quantum"> Quantum</label>
+</div>
+
+<br>
+
+<label>Programming Languages / Skills</label>
+<div class="option-grid">
+<label class="option"><input type="checkbox"> Python</label>
+<label class="option"><input type="checkbox"> JavaScript</label>
+<label class="option"><input type="checkbox"> Java</label>
+<label class="option"><input type="checkbox"> C / C++</label>
+<label class="option"><input type="checkbox"> SQL</label>
+<label class="option"><input type="checkbox"> Go</label>
+<label class="option"><input type="checkbox"> Rust</label>
+<label class="option"><input type="checkbox"> Kotlin / Swift</label>
+</div>
+
+<br>
+
+<button class="btn-primary" style="width:100%">⚡ Get Recommendations</button>
+<button type="reset" id="resetBtn" class="btn-outline" style="width:100%;margin-top:10px">🔄 Reset</button>
+</form>
+
+<div id="resultBox" class="hidden" style="margin-top:20px"></div>
+</div>
+
+<!-- SIDEBAR -->
+<div>
+
+<div class="tip-card card">
+<h3>🧠 Quick Tips</h3><br>
+<div class="tip">✅ Even beginners get projects</div>
+<div class="tip">✅ More inputs → better match</div>
+<div class="tip">✅ Reset & try again</div>
+</div>
+
+<br>
+
+<div class="card stats-highlight">
+<h3>📊 Platform Stats</h3><br>
+<div class="stats-card"><div class="icon green">📦</div>500+ Projects</div>
+<div class="stats-card"><div class="icon blue">👨‍🎓</div>10K+ Users</div>
+<div class="stats-card"><div class="icon purple">⭐</div>95% Success</div>
+</div>
+
+</div>
+</div>
+</main>
+
+<script>
+/* USER NAME */
+const email = localStorage.getItem("userEmail");
+if(email){
+ const n = email.split("@")[0];
+ userName.textContent = n.charAt(0).toUpperCase()+n.slice(1);
+}
+
+/* HOME BUTTON */
+homeBtn.onclick = ()=>{
+ window.scrollTo({top:0,behavior:"smooth"});
+ resultBox.classList.add("hidden");
+ resultBox.innerHTML="";
+};
+
+/* LOGOUT */
+logoutBtn.onclick = ()=>{
+ sessionStorage.clear();
+ localStorage.clear();
+ window.location.href="login.html";
+};
+
+/* PROJECT DATABASE */
+const projects = [
+ {t:"AI Resume Analyzer",d:"ai",l:"beginner",desc:"NLP based resume analysis"},
+ {t:"ML Recommendation Engine",d:"ai",l:"advanced",desc:"Netflix-style ML system"},
+ {t:"Responsive Portfolio Website",d:"web",l:"beginner",desc:"Personal website"},
+ {t:"Expense Tracker App",d:"mobile",l:"intermediate",desc:"Finance mobile app"},
+ {t:"Smart IoT Home System",d:"iot",l:"intermediate",desc:"Home automation"},
+ {t:"Cyber IDS",d:"cyber",l:"advanced",desc:"Intrusion detection"},
+ {t:"Blockchain Voting App",d:"blockchain",l:"advanced",desc:"Decentralized voting"},
+ {t:"Cloud CI/CD Pipeline",d:"cloud",l:"intermediate",desc:"DevOps pipeline"},
+ {t:"Quantum Simulator",d:"quantum",l:"beginner",desc:"Quantum gates simulation"}
+];
+
+/* FORM SUBMIT */
+form.addEventListener("submit",e=>{
+ e.preventDefault();
+
+ const level=document.querySelector("input[name='level']:checked")?.value||"beginner";
+ const domains=[...document.querySelectorAll("input[type='checkbox']:checked")].map(c=>c.value);
+
+ let scored=projects.map(p=>{
+   let s=0;
+   if(p.l===level) s+=3;
+   if(domains.length===0) s+=1;
+   if(domains.includes(p.d)) s+=4;
+   return {...p,score:s};
+ });
+
+ scored.sort((a,b)=>b.score-a.score);
+ const top=scored.slice(0,3);
+
+ resultBox.innerHTML="<h3>🎯 Top Recommended Projects</h3>";
+ top.forEach(p=>{
+   resultBox.innerHTML+=`
+   <div class="card" style="margin-top:14px">
+     <h4>${p.t}</h4>
+     <p>${p.desc}</p>
+     <span class="badge">${p.d}</span>
+     <span class="badge">${p.l}</span>
+   </div>`;
+ });
+
+ resultBox.classList.remove("hidden");
+});
+
+/* RESET */
+resetBtn.onclick=()=>{
+ resultBox.classList.add("hidden");
+ resultBox.innerHTML="";
+};
+</script>
+
+</body>
+</html>
